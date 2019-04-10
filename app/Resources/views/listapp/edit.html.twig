@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit App{% endblock %}
+{% block body %}
+    {% set j = app.session.get("permisos") %}
+    <input type="hidden" id="tip_user" name="tip_user" value="{{ j }}">
+    <h1 class="edit-app-tit">EDIT APP</h1>
+    <div id="carga" style="display: none">
+      <div id="cascara" align="left">
+        <div id="barra" align="left"></div>
+      </div>
+      <a id="mensajeCascara">Cargando... </a>
+    </div>
+    {% if j == "Administrador" %}
+            <div class="form-edit-app">
+              <form name="appbundle_user" id="form-listapp" method="post" action="{{ path('listapp_update', { 'id': listapp.id }) }}">
+                  <div id="appbundle_user">
+                    <div>
+                        <label for="text-nombre" class="required">Name:</label>
+                        <input class="txt_box" type="text" id="text-nombre" value="{{ listapp.nombre }}" name="text-nombre" required="required" />
+                        <label for="text-url" class="required">Url:</label>
+                        <input class="txt_box" type="text" id="text-url" value="{{ listapp.url }}" name="text-url" required="required" /><br>
+                        <label for="text-data" class="required">Data:</label><br><br><br>
+                        <textarea class="edit-text-data" type="text" id="text-data" value="{{ listapp.data }}" name="text-data" required="required" >{{ listapp.data }}</textarea>
+                      </div>
+
+
+                        <div>
+                            <a class="required">Select Category: </a><br>
+                        </div>
+                          <div class="per-tab">
+                            <div class="div_permisos">
+                              {% for categorium in categorias %}
+                                {% if categorium.nombre == listapp.categoria.nombre %}
+                                  <a class="opt_cat">{{ categorium.nombre }}</a><input id="int_box" type="radio" name="category" checked="checked" value="{{ categorium.id }}"><br><br>
+                                {% else %}
+                                  <a class="opt_cat">{{ categorium.nombre }}</a><input id="int_box" type="radio" name="category" value="{{ categorium.id }}"><br><br>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+
+                          </div><br><br>
+
+                    {% if listapp.adjunto != "" %}
+                      <div class="panel-btns1">
+
+                          <a class="btn-download" onclick="descargar_file();">View File  <span class="icon-eye"> </span></a>
+                          <a class="btn-reemplazo" id="btn-reemplazar" onclick="reemplazo();">¿Replace File? <span class="icon-upload2"> </span></a>
+                      </div>
+
+                    {% else %}
+                      <div class="panel-btns1">
+                          <a class="btn-download" id="btn-reemplazar" onclick="reemplazo();">¿ File? <span class="icon-upload2"> </span></a>
+                      </div>
+                    {% endif %}
+
+                    <input type="hidden" id="file_extension" name="file_extension"/>
+                    <input type="hidden" id="name_file" name="name_file"/>
+                    <textarea id="text-categoria" name="categoria" style=" display:none;" value="{{ listapp.categoria.id }}" >{{ listapp.categoria.id }}</textarea>
+                    <input type="hidden" id="_csrf_token" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+                    </div>
+
+              </form>
+
+
+              <input class="arch_adjunto" type="file" name="archivo_adjunto" id="archivo_adjunto" onchange="cargar_archivo();" style=" display:none;"/>
+              <input type="hidden" id="adj" name="adju" value="{{ listapp.adjunto }}"/><br>
+              <input type="hidden" id="arch" name="arch"/><br>
+              <br><br><div class="men_app1" id="mensaje_formapp" style="display:none">
+                <a class="mensaje_form">Faltan campos por diligenciar</a>
+              </div><br>
+              <button onclick="validar();" class="btn-crear" >Save  <span class="icon-clipboard"> </span></button>
+            </div>
+    {% else %}
+      <div class="form-edit-app-user">
+        <form name="appbundle_user" id="form-listapp" method="post" action="{{ path('listapp_update', { 'id': listapp.id }) }}">
+            <div id="appbundle_user">
+              <div>
+                  <label for="text-nombre" class="required">Name:</label>
+                  <input class="txt_box" type="text" id="text-nombre" value="{{ listapp.nombre }}" name="text-nombre" required="required" />
+                  <label for="text-url" class="required">Url:</label>
+                  <input class="txt_box" type="text" id="text-url" value="{{ listapp.url }}" name="text-url" required="required" /><br>
+                  <label for="text-data" class="required">Data:</label><br><br><br>
+                  <textarea class="edit-text-data" type="text" id="text-data" value="{{ listapp.data }}" name="text-data" required="required" >{{ listapp.data }}</textarea>
+                </div>
+
+              {% if listapp.adjunto != "" %}
+                <div class="panel-btns">
+
+                    <a class="btn-download" onclick="descargar_file();">View File  <span class="icon-eye"> </span></a>
+                    <a class="btn-reemplazo" id="btn-reemplazar" onclick="reemplazo();">¿Replace File? <span class="icon-upload2"> </span></a>
+                </div>
+
+              {% else %}
+                <div class="panel-btns">
+                    <a class="btn-download2" id="btn-reemplazar" onclick="reemplazo();">¿ File? <span class="icon-upload2"> </span></a>
+                </div>
+              {% endif %}
+
+              <input type="hidden" id="file_extension" name="file_extension"/>
+              <input type="hidden" id="name_file" name="name_file"/>
+              <textarea id="text-categoria" name="categoria" style=" display:none;" value="{{ listapp.categoria.id }}" >{{ listapp.categoria.id }}</textarea>
+              <input type="hidden" id="_csrf_token" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+              </div>
+
+        </form>
+
+
+        <input class="arch_adjunto1" type="file" name="archivo_adjunto" id="archivo_adjunto" onchange="cargar_archivo();" style=" display:none;"/>
+        <input type="hidden" id="adj" name="adju" value="{{ listapp.adjunto }}"/><br>
+        <input type="hidden" id="arch" name="arch"/><br>
+        <br><br><div class="men_app2" id="mensaje_formapp" style="display:none">
+          <a class="mensaje_form">Faltan campos por diligenciar</a>
+        </div><br>
+        <button onclick="validar();" class="btn-crear-user" >Save  <span class="icon-clipboard"> </span></button>
+
+
+      </div>
+      <form id="form_adjunto"  name="foooo" method="post" action="{{ path('file_adjunto') }}">
+        <input  style=" display:none;" id="file_name" name="file_name" value="{{ listapp.adjunto }}"/>
+        <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+      <form>
+    {% endif %}
+
+    <script>
+    function gId(id)
+    {
+        return document.getElementById(id);
+    }
+    function rec(r)
+    {
+
+        window.scrollTo(0,0)
+        gId("mensajeCascara").innerHTML="Cargando...";
+
+        document.getElementById("carga").style.display = "block"
+        document.getElementById("cascara").style.display = "block"
+        document.getElementById("barra").style.display = "block"
+
+        partialClear()
+        upName = gId("name_file").value.toString();
+        upData = r;
+        $tam = upData.length;
+        upUrl = '*'+'{{ base1 }}'+'{{ rutaAj}}';
+        console.log(upUrl);
+        upAction = progreso;
+        partialUpload('');
+    }
+
+    function progreso()
+    {
+        var pro = ((($tam-upData.length)/$tam)*100).toFixed(0)
+        gId("barra").style.width = pro+"%";
+        console.log(pro);
+
+        if(upFin == 1)
+        {
+
+          gId("text-nombre").value=gId("text-nombre").value;
+          gId("text-url").value=gId("text-url").value;
+          gId("text-data").value=gId("text-data").value;
+          gId("file_extension").value=gId("file_extension").value;
+          gId("text-categoria").value=gId("text-categoria").value;
+
+          gId("form-listapp").submit();
+          hide('cascara');
+        }
+    }
+
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,50 @@
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('fonts/style.css') }}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
+</head>
+<div class="menu-vertical">
+    <div class="logo-centro">
+      <a><img class ="logo-it-log" src="{{ asset('images/logo-white.png') }}"/></a>
+    </div>
+</div>
+<body>
+<a class="tit-app">Titán</a><br>
+<h1 class="titulo-sesion">INICIAR SESION</h1>
+
+<div class="form-edit-login">
+  {% for flash_message in app.session.flashBag.get('notice') %}
+    <div class="flash-notice-login">
+      <a>{{ flash_message }}</a>
+    </div>
+  {% endfor %}
+<form  id="form_login" name="form_log" action="{{ path('login') }}" method="post">
+
+    <label class="required1" for="username">Username:</label>
+    <input class="txt_box_log" type="text" id="username_id" name="username" placeholder="Username" />
+
+    <label class="required1" for="password">Password:</label>
+    <input class="txt_box_log" type="password" id="password_id" placeholder="Password"name="password"/>
+
+    <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+
+</form>
+<button class="btn-login" onclick="iniciar_session();">Login   <span class="icon-key"></span></button>
+
+</body>
+<script type="text/javascript">
+    function gId(id)
+    {
+        return document.getElementById(id);
+    }
+    function iniciar_session()
+    {
+      gId("form_login").submit();
+    }
+</script>

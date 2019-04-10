@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %}Show User{% endblock %}
+{% block body %}
+    <h1 class="show-user-tit">USER</h1>
+    <div class="div_user">
+        <table id="show-user" class="table table-hover">
+          <thead>
+              <tr>
+                  <th>NAME</th>
+                  <th>USERNAME</th>
+
+              </tr>
+          </thead>
+          <tbody>
+                <tr>
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <table id="show-permissions" class="table table-hover">
+      <thead>
+          <tr>
+            <th><span class="icon-key2">  </span>PERMISSIONS</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% set perm = user.permisos|split(';') %}
+        {% for p in perm|sort  %}
+          {% if p != "" %}
+            <tr>
+                  <td>{{ p|replace({ ("_"): " " }) }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+  </table>
+
+          <a class="btn-editar-user" class="etiqueta" href="{{ path('user_edit', { 'id': user.id }) }}"><span class="icon-pencil"> </span>Edit</a>
+
+            {{ form_start(delete_form) }}
+                <button  type="submit" class="btn-borrar-user" value="Delete"><span class="icon-cross"> </span>Delete</button>
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

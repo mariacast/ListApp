@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Users{% endblock %}
+{% block body %}
+
+    <h1 class="titulo_list_user">LIST USERS</h1>
+    <div class="content">
+        <table id="list-users"class="table table-hover">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>NAME</th>
+                    <th>USERNAME</th>
+                    <th colspan="2">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a>{{ loop.index }}</a></td>
+                    <td><a class="user" href="{{ path('user_show', { 'id': user.id }) }}">{{ user.nombre }}</a></td>
+                    <td>{{ user.username }}</td>
+                    <td><a class="b_editar" href="{{ path('user_show', { 'id': user.id }) }}" ><span class="icon-eye"> </span>Show</a></td>
+                    <td><a class="b_editar" href="{{ path('user_edit', { 'id': user.id }) }}"><span class="icon-pencil"> </span>Edit</a></td>
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    <ul>
+        <li>
+            <a class="b_create" href="{{ path('user_new') }}">New User   <span class="icon-user-plus"></span></a>
+        </li>
+    </ul>
+{% endblock %}

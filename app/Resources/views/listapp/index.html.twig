@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% block title %}List App{% endblock %}
+{% block body %}
+    <h1 class="list-tit">LIST APP</h1>
+    <div class="content">
+    <table id="list-users"class="table table-hover">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>NAME</th>
+                <th>URL</th>
+                <th colspan="2">ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set brek = false %}
+        {% set counter = 1 %}
+
+          {% for listapp in listapps %}
+          <tr>
+
+              {% for p in perms %}
+
+                  {% if p != "" %}
+
+                      {% set url =  listapp.url %}
+
+                        {% if p ==  "Modificar_#{ listapp.categoria.nombre }" %}
+                            <td><a class="user">{{ counter }}</a></td>
+                            <td><a class="user" href="{{ path('listapp_show', { 'id': listapp.id }) }}">{{ listapp.nombre }}</a></td>
+                            <td><a style="cursor:pointer" onclick="new_pest('{{ url }}');">{{ url |slice(0, 25) }}</a></td>
+                            <td><a class="b_editar" href="{{ path('listapp_show', { 'id': listapp.id }) }}"><span class="icon-eye"> </span>Show</a></td>
+                            <td><a class="b_editar" href="{{ path('listapp_edit', { 'id': listapp.id }) }}"><span class="icon-pencil"> </span>Edit</a></td>
+                            {% set counter = counter + 1 %}
+                        {% endif %}
+                        {% if p ==  "Ver_#{ listapp.categoria.nombre }" %}
+                            <td><a class="user">{{ counter }}</a></td>
+                            <td><a class="user" href="{{ path('listapp_show', { 'id': listapp.id }) }}">{{ listapp.nombre }}</a></td>
+                            <td><a style="cursor: pointer; " onclick="new_pest('{{ url }}');">{{ url |slice(0, 25) }}</a></td>
+                            <td colspan="2"><a class="b_editar" href="{{ path('listapp_show', { 'id': listapp.id }) }}"><span class="icon-eye"> </span>Show</a></td>
+                            {% set counter = counter + 1 %}
+                        {% endif %}
+
+                        {% if p == "Administrador" %}
+                            <td><a class="user">{{ counter }}</a></td>
+                            <td><a class="user" href="{{ path('listapp_show', { 'id': listapp.id }) }}">{{ listapp.nombre }}</a></td>
+                            <td><a  style="cursor:pointer" onclick="new_pest('{{ url }}');">{{ url |slice(0, 25) }}</a ></td>
+                            <td><a class="b_editar" href="{{ path('listapp_show', { 'id': listapp.id }) }}"><span class="icon-eye"> </span>Show</a></td>
+                            <td><a class="b_editar" href="{{ path('listapp_edit', { 'id': listapp.id }) }}"><span class="icon-pencil"> </span>Edit</a></td>
+                            {% set counter = counter + 1 %}
+                        {% endif %}
+
+                {% endif %}
+
+              </tr>
+          {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table><br><br><br><br>
+  </div>
+  <ul>
+      <li>
+  {% set break = false %}
+  {% for c in perms if not break %}
+        {% if c == "Administrador" or c ==  "Modificar_#{ categ }" %}
+            <a class="b_create" href="{{ path('listapp_new') }}">New App +</a>
+            {% set break = true %}
+        {% endif %}
+  {% endfor %}
+    </li>
+  </ul>
+{% endblock %}

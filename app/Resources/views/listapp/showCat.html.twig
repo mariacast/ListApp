@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block title %}List Categories{% endblock %}
+{% block body %}
+    <h1 class="tit_cate_app">LIST CATEGORIES </h1>
+    <div class="content">
+    <table id="list-users"class="table table-hover">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>NAME CATEGORY</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for p in perms %}
+            {% if p == "Administrador" %}
+                {% for c in categorias %}
+                  <tr>
+                    <td><a>{{ loop.index }}</a></td>
+                    {% set cat = c.nombre %}
+                    <td><a class="user">{{ cat }}</a></td>
+                    <td style="cursor:pointer"><a class="b_editar" id="val" onclick="Cate('{{ cat }}');" value="{{ cat }}"><span class="icon-eye"> </span>Show</a></td>
+                  </tr>
+                {% endfor %}
+
+            {% endif %}
+          {% endfor %}
+          {% set counter = 1 %}
+          {% for c in perms|sort  %}
+          <tr>
+            {% set perm = c|split('_') %}
+            {% for op in perm %}
+
+                    {% if (op != "Administrador") %}
+                      {% if (op != "Modificar") %}
+                        {% if (op != "Ver") %}
+                          {% if (op != "") %}
+
+                              {% set opc = op %}
+                              <td><a class="user">{{ counter }}</a></td>
+                              <td><a class="user">{{ op }}</a></td>
+                              <td style="cursor:pointer"><a class="b_editar" id="val" onclick="AppCategoria('{{ op }}');" value="{{ op }}"><span class="icon-eye"> </span>Show</a></td>
+                              {% set counter = counter + 1 %}
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+              </tr>
+            {% endfor %}
+
+          {% endfor %}
+
+        </tbody>
+    </table><br><br><br><br>
+    <form style=" display:none;" name="form_cat" id="form_cat" method="post" action="{{ path('AppCat') }}">
+      <input type="hidden" id="Category" name="Category" value="" >
+      <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+    </form>
+  </div>
+
+    <script type="text/javascript">
+        var o;
+        function gId(id)
+        {
+            return document.getElementById(id);
+        }
+        function AppCategoria(op) {
+            var cat = op;
+            gId("Category").value = cat;
+            gId("form_cat").submit();
+        }
+        function Cate(cat) {
+            var ca = cat;
+            gId("Category").value = ca;
+            gId("form_cat").submit();
+        }
+    </script>
+{% endblock %}

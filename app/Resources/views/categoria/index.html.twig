@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %}Categories{% endblock %}
+{% block body %}
+<h1 class="titulo2">CATEGORIES</h1>
+<div class="content">
+    <table id="list-catego"class="table table-hover">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>NAME</th>
+                <th colspan="2">ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorium in categorias %}
+            <tr>
+                <td><a>{{ loop.index }}</a></td>
+                <td><a class="user" href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.nombre }}</a></td>
+                <td><a class="b_editar" href="{{ path('categoria_show', { 'id': categorium.id }) }}"><span class="icon-eye"> </span>Show</a></td>
+                <td><a class="b_editar"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}"><span class="icon-pencil"> </span>Edit</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <ul>
+        <li>
+            <a class="b_create" href="{{ path('categoria_new') }}">New Category  <span class="icon-stack"> </span></a>
+        </li>
+    </ul>
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}Show Category{% endblock %}
+{% block body %}
+
+<h1 class="show-cate-tit">CATEGORY</h1>
+<div class="content">
+    <table id="list-catego-show"class="table table-hover">
+        <thead>
+          <tr>
+              <th>Nombre</th>
+          </tr>
+        <tbody>
+            <tr>
+                <td>{{ categorium.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="btns_show">
+        <a class="btn-editarCat" href="{{ path('categoria_edit', { 'id': categorium.id }) }}"><span class="icon-pencil"> </span>Edit</a>
+
+            {{ form_start(delete_form) }}
+                <button  type="submit" class="btn-borrarCat" value="Delete"><span class="icon-cross"> </span>Delete</button>
+            {{ form_end(delete_form) }}
+
+    </div>
+{% endblock %}

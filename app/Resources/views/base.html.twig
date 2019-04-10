@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}ITCorporation{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" />
+        <link href="{{ asset('fonts/style.css') }}" rel="stylesheet" />
+        <script type="text/javascript" src="{{ asset('js/ajax.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/dom.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/basico.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/upload.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/funciones.js') }}"></script>
+        <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    <header>
+        <div class="wrapper">
+
+            <div class="btns">
+                <div class="user_btn">
+                <a class="bt" href="{{ path('login') }}">Exit   <span class="icon-exit"></span></a>
+                <a class="bt" id="btn_fold_grupo"><span class="icon-user"> </span>{{ app.session.get("nombre") }}</a>
+                <div>
+
+                {% set j = app.session.get("permisos")|split(';') %}
+                {% if j[0] == "Administrador" %}
+
+                    <a class="bt" href="{{ path('categoria_index') }}"><span class="icon-stack"> </span>CATEGORIES</a>
+                    <a class="bt" href="{{ path('viwCat') }}"><span class="icon-list2"> </span>LISTAPP</a>
+                    <a class="bt" href="{{ path('user_index') }}"><span class="icon-users"> </span>USERS</a>
+
+                {% else %}
+
+                    <a class="bt" href="{{ path('viwCat') }}"><span class="icon-list2"> </span>LISTAPP</a>
+                {% endif %}
+
+
+
+                <a class="tit-app1"><img class ="logo-it" src="{{ asset('images/logo-white.png') }}"/></a>
+          </div>
+
+        </div>
+    </header>
+
+    <body>
+
+     <div id="modal" class="modal">
+
+       <!-- Modal content -->
+       <div class="modal-content">
+         <span class="close">x</span>
+         <!-- Formulari -->
+         <form action="{{ path('data_pass', { 'id': app.session.get("id")  }) }}" method=post name="formulariopass" id="formulariopass" class="form_pass">
+
+             <div class="contenido">
+                  <label class="tit-pass" style="text-align:center">CHANGE PASSWORD</label>
+                 <div  class="div_password">
+                     <label for="password" class="lab_user">Password Acutal:</label>
+                     <input class="txt_box" type="password" id="password_actual" value="" name="password_actual" required="required" />
+                 </div>
+                 <div  class="div_passnew">
+                     <label for="password" class="lab_user">Password:</label>
+                     <input class="txt_box" type="password" id="password_new" value="" name="password_new" required="required" />
+                 </div>
+                 <div class="div_confirmar">
+                     <label for="confirmacion" class="lab_user1">Confirm <br>
+                       Password:</label><br>
+                     <input class="txt_box" type="password" id="confirmacion" value="" name="confirmacion" required="required" />
+                 </div>
+               <div>
+                 <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+               </div>
+             </div>
+         </form>
+         <div id="mensaje_form" style="display:none">
+           <a class="mensaje_form">Faltan campos por diligenciar</a>
+         </div><br>
+         <br><div class="div_btn_crear">
+            <button onclick="validarCampos();" class="btn-crear1" value="Create">Save   <span class="icon-user-plus"></span></button>
+          </div>
+       </div>
+     </div>
+     {% for flash_message in app.session.flashBag.get('notice') %}
+         <div class="flash-notice22">
+           <a>{{ flash_message }}</a>
+         </div>
+     {% endfor %}
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+
+
+	<script type="text/javascript">
+
+     function gId(id)
+     {
+         return document.getElementById(id);
+     }
+
+     var modal = document.getElementById('modal');
+
+     // Get the button that opens the modal
+     var btn = document.getElementById("btn_fold_grupo");
+
+     // Get the <span> element that closes the modal
+     var span = document.getElementsByClassName("close")[0];
+
+     // When the user clicks on the button, open the modal
+     btn.onclick = function()
+     {
+       modal.style.display = "block";
+     }
+
+     // When the user clicks on <span> (x), close the modal
+     span.onclick = function()
+     {
+       modal.style.display = "none";
+     }
+
+     // When the user clicks anywhere outside of the modal, close it
+     window.onclick = function(event)
+     {
+       if (event.target == modal)
+       {
+         modal.style.display = "none";
+       }
+     }
+     function validarCampos()
+     {
+         var act = gId("password_actual").value;
+         var nue = gId("password_new").value;
+         var conf = gId("confirmacion").value;
+         if(act != ""){
+           if(nue != ""){
+             if(conf != "")
+             {
+                 gId("formulariopass").submit();
+             }
+             else {
+               gId("mensaje_form").style.display = "block";
+             }
+           }
+           else {
+             {
+               gId("mensaje_form").style.display = "block";
+             }
+           }
+         }
+         else
+         {
+           gId("mensaje_form").style.display = "block";
+         }
+     }
+
+	</script>
+
+</html>

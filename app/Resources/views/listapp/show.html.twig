@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}Show App{% endblock %}
+{% block body %}
+    <h1 class="show-app-tit">APP</h1>
+
+    <table id="show-app" class="table table-hover">
+        <tbody>
+            <tr>
+                <th id="titulo-user">Name</th>
+                <td>{{ listapp.nombre }}</td>
+            </tr>
+            <tr>
+                <th id="titulo-user">Url</th>
+                <td><a style="cursor:pointer" onclick="new_pest('{{ listapp.url }}');">{{ listapp.url |slice(0, 25) }}</a></td>
+
+            </tr>
+            <tr>
+                <th id="titulo-user">Data</th>
+                <td><textarea id="txt-data" readonly>{{ listapp.data }}</textarea></td>
+            </tr>
+            <tr>
+                <th id="titulo-user">Category</th>
+                <td>{{ listapp.categoria.nombre |slice(0, 40) }}</td>
+            </tr>
+            {% if listapp.adjunto != "" %}
+                <tr>
+                    <th id="titulo-user">File</th>
+                    <td><a class="btn-verFile" onclick="descargar_file();">Show  <span class="icon-eye"></span></a></td>
+                </tr>
+            {% endif %}
+
+
+        </tbody>
+    </table>
+    {% for p in perms %}
+      {% if p ==  "Modificar_#{ listapp.categoria.nombre }" or p == "Administrador" %}
+          <div class="btns_show">
+              <a class="btn-editar2" href="{{ path('listapp_edit', { 'id': listapp.id }) }}"><span class="icon-pencil"> </span>Edit</a>
+
+                  {{ form_start(delete_form) }}
+                      <button  type="submit" class="btn-borrarapp" value="Delete"><span class="icon-cross"> </span>Delete</button>
+                  {{ form_end(delete_form) }}
+          </div>
+      {% endif %}
+    {% endfor %}
+    <form id="form_adjunto"  name="foooo" method="post" action="{{ path('file_adjunto') }}">
+      <input  style=" display:none;" id="file_name" name="file_name" value="{{ listapp.adjunto }}"/>
+      <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
+    <form>
+
+{% endblock %}
